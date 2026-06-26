@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+message Envelope {
+  string nonce = 1;
+
+  oneof payload {
+    Metadata metadata = 2;
+    WSError error = 3;
+    ConvertRequest convert  = 4;
+    ConvertResponce = 5;
+    string system_message = 6;
+  }
+
+}
+
+
+
+message WSError {
+  string code = 1;
+  string message = 2;
+}
+
+message Metadata {
+
+}

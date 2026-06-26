@@ -1,0 +1,13 @@
+//syntax = "proto3";
+//
+//message ErrorMessage {
+//  string type = 1;
+//  WSError data = 2;
+//  string nonce = 3;
+//}
+//
+//message WSError {
+//  string code = 1;
+//  string message = 2;
+//}
+

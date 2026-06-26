@@ -1,0 +1,23 @@
+package eventtransport
+
+import "fmt"
+
+func (c *Client) SendError(code, message string) {
+	errorMsg := WSError{
+		Code:    code,
+		Message: message,
+	}
+
+	err := c.SendMessage(errorMsg)
+	if err != nil {
+		fmt.Printf("[ERROR] [ACK] %s\n", err)
+	}
+
+}
+
+func (c *Client) SendAck(payload interface{}) {
+	err := c.SendMessage(payload)
+	if err != nil {
+		fmt.Printf("[ERROR] [ACK] %s\n", err)
+	}
+}
