@@ -267,7 +267,9 @@ func (t *Transport) handleUpload(client *eventtransport.Client, stream io.Reader
 
 	job.SetStatus(mediaconverter.JobStatusUploading)
 
-	client.SendAck("system_message", "Upload has been started")
+	client.SendAck(eventtransport.Progress{
+		State: "Upload has been started",
+	})
 
 	file, err := os.Create(job.InputPath)
 	if err != nil {
@@ -292,11 +294,9 @@ func (t *Transport) handleUpload(client *eventtransport.Client, stream io.Reader
 	mediaconverter.ProcessingQueue <- job.ID
 
 	client.SendAck(
-		"system_message",
-		map[string]any{
-			"job_id": job.ID,
-		},
-	)
+		eventtransport.JobCreated{
+			JobID: job.ID.String(),
+		})
 }
 
 func (t *Transport) handleDownload(client *eventtransport.Client, stream io.Writer, jobID uuid.UUID) {

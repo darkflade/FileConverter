@@ -81,10 +81,10 @@ const (
 )
 
 var streamKindName = map[StreamKind]string{
-	Control:  "Control",
-	Upload:   "Upload",
-	Download: "Download",
-	PingPong: "PingPong",
+	Control:  "control",
+	Upload:   "upload",
+	Download: "download",
+	PingPong: "ping-pong",
 }
 
 func (sk StreamKind) String() string {

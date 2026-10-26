@@ -1,19 +1,30 @@
 package protocol
 
-import "reflect"
+import (
+	"FileConverter/eventtransport"
+)
 
-var typeRegistry = map[reflect.Type]string{}
+func init() {
 
-func GetTypeRegister() map[reflect.Type]string {
-	return typeRegistry
+	RegisterConstructor("error", func() eventtransport.EventMessagePayload {
+		return &eventtransport.EventError{}
+	})
+
+	RegisterConstructor("job_created", func() eventtransport.EventMessagePayload {
+		return &eventtransport.JobCreated{}
+	})
+
+	RegisterConstructor("metadata", func() eventtransport.EventMessagePayload {
+		return &eventtransport.Metadata{}
+	})
 }
 
-func RegisterType(v any, name string) {
-	typeRegistry[reflect.TypeOf(v)] = name
+var constructorRegistry = map[string]func() eventtransport.EventMessagePayload{}
+
+func GetConstructorRegister() map[string]func() eventtransport.EventMessagePayload {
+	return constructorRegistry
 }
 
-var constructorRegistry = map[string]func() any{}
-
-func RegisterConstructor(name string, ctor func() any) {
+func RegisterConstructor(name string, ctor func() eventtransport.EventMessagePayload) {
 	constructorRegistry[name] = ctor
 }

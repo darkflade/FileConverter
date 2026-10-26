@@ -63,7 +63,7 @@ func (c *Client) IsClosed() bool {
 	return c.closed
 }
 
-func (c *Client) SendMessage(payload interface{}) error {
+func (c *Client) SendMessage(payload EventMessagePayload) error {
 	if c.IsClosed() {
 		return NewError("client_closed", "Client connection is closed")
 	}

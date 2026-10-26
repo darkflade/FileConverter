@@ -106,6 +106,8 @@ func (j *ConversionJob) Complete() {
 	j.Status = JobStatusDone
 	j.mu.Unlock()
 
+	j.emit(JobStatusDone, "")
+
 	j.once.Do(func() {
 		close(j.Done)
 	})
@@ -118,6 +120,8 @@ func (j *ConversionJob) Fail(err string) {
 	j.Status = JobStatusFailed
 	j.Error = err
 	j.mu.Unlock()
+
+	j.emit(JobStatusFailed, err)
 
 	j.once.Do(func() {
 		close(j.Done)
@@ -149,4 +153,14 @@ func (j *ConversionJob) snapshot() (JobStatus, string) {
 	j.mu.RLock()
 	defer j.mu.RUnlock()
 	return j.Status, j.Error
+}
+
+func (j *ConversionJob) emit(status JobStatus, err string) {
+	select {
+	case j.Events <- JobEvent{
+		Status: status,
+		Error:  err,
+	}:
+	default:
+	}
 }
